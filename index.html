@@ -268,6 +268,22 @@ h1 em{display:block}
 .review figcaption{font-size:13.5px;color:var(--muted)}
 .review figcaption b{color:var(--text);font-weight:600}
 
+/* Prints de clientes (carrossel automático) */
+.prints{position:relative;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.prints__track{display:flex;gap:clamp(14px,2vw,22px);width:max-content;animation:prints var(--dur,60s) linear infinite}
+.prints:hover .prints__track,.prints:focus-within .prints__track{animation-play-state:paused}
+@keyframes prints{to{transform:translateX(calc(-50% - clamp(14px,2vw,22px)/2))}}
+.print{flex:none;width:clamp(180px,22vw,240px);margin:0;padding:8px;border-radius:30px;background:linear-gradient(160deg,#2a231b,#120e0a);border:1px solid var(--line-strong);box-shadow:0 30px 60px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06);cursor:zoom-in;transition:transform .35s var(--ease),border-color .3s}
+.print:hover{transform:translateY(-6px);border-color:var(--gold)}
+.print img{display:block;width:100%;aspect-ratio:560/1216;object-fit:cover;border-radius:23px}
+.print:focus-visible{outline:2px solid var(--gold-3);outline-offset:4px}
+.prints__note{text-align:center;color:var(--muted-2);font-size:13px;margin:18px 0 0}
+@media(prefers-reduced-motion:reduce){.prints{overflow-x:auto}.prints__track{animation:none}}
+.zoom{border:0;padding:0;background:transparent;max-width:min(92vw,440px);max-height:92vh}
+.zoom::backdrop{background:rgba(5,4,3,.88);backdrop-filter:blur(4px)}
+.zoom img{display:block;width:100%;max-height:92vh;object-fit:contain;border-radius:20px}
+.zoom button{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line-strong);background:rgba(11,9,7,.8);color:var(--text);font-size:22px;line-height:1;cursor:pointer}
+
 /* Quem somos */
 .about__grid{display:grid;gap:32px}
 @media(min-width:960px){.about__grid{grid-template-columns:1.1fr .9fr;gap:72px;align-items:center}}
@@ -688,6 +704,9 @@ h1 em{display:block}
         <h2>O que dizem <em>os clientes</em></h2>
       </header>
       <div class="reviews" id="reviews"></div>
+      <div class="prints reveal" id="prints" aria-label="Prints de conversas com clientes"><div class="prints__track" id="printsTrack"></div></div>
+      <p class="prints__note" id="printsNote">Conversas reais com clientes no WhatsApp · toque para ampliar</p>
+      <dialog class="zoom" id="zoom"><img alt=""><button type="button" aria-label="Fechar">×</button></dialog>
     </div>
   </section>
 
@@ -919,10 +938,17 @@ const LOJA = {
 
   // Só depoimentos REAIS de clientes. Lista vazia = a seção some da página. Formato:
   // { nota: 5, texto: "O que o cliente disse", nome: "Nome", cidade: "Cidade/UF" },
-  depoimentos: [
-    { nota: 5, texto: "O cheiro fixa muito bem na pele.", nome: "João Pedro" },
-    { nota: 5, texto: "Chegou bem rápido e muito bem embalado.", nome: "Gustavo Silva" },
-    { nota: 5, texto: "Fixa muito bem na pele, chegou rápido e veio muito bem embalado.", nome: "Paulo Sérgio" },
+  depoimentos: [],
+
+  // Prints de conversas REAIS com clientes (ficam rodando sozinhos). Arquivos em assets/prints.
+  prints: [
+    { img: "assets/prints/alisson.jpg", nome: "Alisson" },
+    { img: "assets/prints/douglas.jpg", nome: "Douglas" },
+    { img: "assets/prints/wilton.jpg", nome: "Wilton" },
+    { img: "assets/prints/maria-paula.jpg", nome: "Maria Paula" },
+    { img: "assets/prints/sergio.jpg", nome: "Sergio" },
+    { img: "assets/prints/roberto.jpg", nome: "Roberto" },
+    { img: "assets/prints/gustavo.jpg", nome: "Gustavo" },
   ],
 };
 
@@ -1006,6 +1032,23 @@ const LOJA = {
       <blockquote>“${esc(d.texto)}”</blockquote>
       <figcaption><b>${esc(d.nome)}</b>${d.cidade ? ` · ${esc(d.cidade)}` : ""}</figcaption>
     </figure>`).join("");
+
+  // Prints de clientes: a lista vai duplicada para o loop não ter emenda
+  if (!LOJA.prints?.length) { $("#prints").hidden = $("#printsNote").hidden = true; }
+  else {
+    if (!LOJA.depoimentos.length) $("#depoimentos").hidden = false;
+    const card = (p, clone) => `<button type="button" class="print"${clone ? ' aria-hidden="true" tabindex="-1"' : ""} data-img="${esc(p.img)}">
+      <img src="${esc(p.img)}" alt="${clone ? "" : "Conversa no WhatsApp com " + esc(p.nome)}" decoding="async" width="560" height="1216"></button>`;
+    const track = $("#printsTrack");
+    track.innerHTML = LOJA.prints.map(p => card(p)).join("") + LOJA.prints.map(p => card(p, true)).join("");
+    track.style.setProperty("--dur", LOJA.prints.length * 7 + "s");
+    const zoom = $("#zoom");
+    track.addEventListener("click", e => {
+      const b = e.target.closest(".print"); if (!b) return;
+      $("img", zoom).src = b.dataset.img; zoom.showModal();
+    });
+    zoom.addEventListener("click", () => zoom.close());
+  }
 
   // Animação de entrada
   const io = new IntersectionObserver(entries => entries.forEach(e => {

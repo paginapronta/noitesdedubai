@@ -253,6 +253,8 @@ h1 em{display:block}
 .step__n{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:60px;line-height:1;color:transparent;-webkit-text-stroke:1px var(--gold);margin-bottom:10px}
 .step h3{margin-bottom:8px}
 .step p{margin:0;color:var(--muted);font-size:15.5px}
+@media(min-width:640px){.steps--4{grid-template-columns:repeat(2,1fr);gap:28px}}
+@media(min-width:1080px){.steps--4{grid-template-columns:repeat(4,1fr)}}
 
 /* Depoimentos */
 .reviews{display:grid;gap:16px}
@@ -757,6 +759,38 @@ h1 em{display:block}
         </ul>
         <div class="pay" aria-label="Formas de pagamento"><span>PIX</span><span>VISA</span><span>MASTERCARD</span><span>ELO</span></div>
         <p class="fine">Revenda independente de produtos Lattafa. Imagens ilustrativas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA A COMPRA -->
+  <section class="section" id="como-comprar" style="padding-top:0">
+    <div class="wrap">
+      <header class="section__head reveal">
+        <p class="eyebrow">Sem surpresas</p>
+        <h2>Como funciona <em>a sua compra</em></h2>
+      </header>
+      <div class="steps steps--4">
+        <div class="step reveal">
+          <div class="step__n">01</div>
+          <h3>Você paga com segurança</h3>
+          <p>Escolhe 1 frasco ou o kit e finaliza no checkout da Appmax: Pix aprovado na hora ou <span data-parcelas="1">em até 12x no cartão</span>.</p>
+        </div>
+        <div class="step reveal d1">
+          <div class="step__n">02</div>
+          <h3>Pedido confirmado</h3>
+          <p>Assim que o pagamento é aprovado, separamos e embalamos o seu pedido.</p>
+        </div>
+        <div class="step reveal d2">
+          <div class="step__n">03</div>
+          <h3>Enviamos com rastreio</h3>
+          <p>Postamos em <span data-prazo>até 2 dias úteis</span>, com frete grátis, e você recebe o código para acompanhar a entrega.</p>
+        </div>
+        <div class="step reveal d3">
+          <div class="step__n">04</div>
+          <h3>Chegou? Ainda tem garantia</h3>
+          <p>Você tem 7 dias depois de receber para desistir da compra e receber o seu dinheiro de volta.</p>
+        </div>
       </div>
     </div>
   </section>

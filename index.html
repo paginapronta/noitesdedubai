@@ -793,7 +793,7 @@ h1 em{display:block}
   <div class="wrap footer__grid">
     <div>
       <a class="logo" href="#topo" aria-label="Voltar ao início"><span class="ar" lang="ar" dir="rtl" aria-hidden="true">أسد</span><span class="logo__txt">ASAD</span></a>
-      <p>© <span data-ano>2026</span><span data-loja></span></p>
+      <p>© <span data-ano>2026</span><span data-loja></span><span data-cnpj> · CNPJ 66.593.368/0001-19</span></p>
       <p data-se-whats><a href="#" data-whats>WhatsApp <span data-whats-numero>(11) 5199-5479</span></a></p>
     </div>
     <div>
@@ -818,6 +818,7 @@ h1 em{display:block}
    ===================================================================== */
 const LOJA = {
   nome: "",               // nome da loja no rodapé (vazio = não aparece)
+  cnpj: "66.593.368/0001-19",
 
   // WhatsApp de contato: DDI + DDD + número, só dígitos. Vazio = os links somem.
   whatsapp: "551151995479",
@@ -875,6 +876,7 @@ const LOJA = {
   fill("[data-grife-porml]", el => el.textContent = brl(LOJA.referenciaGrife.preco / LOJA.referenciaGrife.ml));
   fill("[data-prazo]", el => el.textContent = LOJA.prazoPostagem);
   fill("[data-loja]", el => el.textContent = LOJA.nome ? ` · ${LOJA.nome}` : "");
+  fill("[data-cnpj]", el => el.textContent = LOJA.cnpj ? ` · CNPJ ${LOJA.cnpj}` : "");
 
   // WhatsApp de contato
   const whats = LOJA.whatsapp.replace(/\D/g, "");

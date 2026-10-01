@@ -266,6 +266,17 @@ h1 em{display:block}
 .review figcaption{font-size:13.5px;color:var(--muted)}
 .review figcaption b{color:var(--text);font-weight:600}
 
+/* Quem somos */
+.about__grid{display:grid;gap:32px}
+@media(min-width:960px){.about__grid{grid-template-columns:1.1fr .9fr;gap:72px;align-items:center}}
+.about__copy p:not(.eyebrow){color:var(--muted);font-size:17px;max-width:34em}
+.about__copy a{color:var(--gold-3)}
+.pillars{display:grid;gap:14px}
+.pillar{display:flex;gap:16px;align-items:flex-start;padding:22px}
+.pillar .benefit__icon{margin:0;flex:none}
+.pillar h3{font-size:23px;margin:2px 0 4px}
+.pillar p{margin:0;color:var(--muted);font-size:14.5px}
+
 /* Oferta */
 .offer{padding:clamp(76px,10vw,128px) 0;background:radial-gradient(760px 520px at 28% 45%,rgba(184,137,58,.13),transparent 62%)}
 .offer__grid{display:grid;gap:32px;align-items:center}
@@ -378,6 +389,7 @@ h1 em{display:block}
   <symbol id="i-gem" viewBox="0 0 24 24"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18"/><path d="M9.5 4 8 9l4 11 4-11-1.5-5"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-10"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5.5h16v10.5H9l-5 4z"/><path d="M8.5 10.5h7"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></symbol>
 </svg>
 
@@ -396,6 +408,7 @@ h1 em{display:block}
       <a href="#fragrancia">A fragrância</a>
       <a href="#notas">Notas</a>
       <a href="#valor">Preço</a>
+      <a href="#quem-somos">Quem somos</a>
       <a href="#duvidas">Dúvidas</a>
     </nav>
     <a class="btn btn--gold btn--sm" href="#oferta">Comprar</a>
@@ -676,6 +689,33 @@ h1 em{display:block}
     </div>
   </section>
 
+  <!-- QUEM SOMOS -->
+  <section class="section" id="quem-somos" style="padding-top:0">
+    <div class="wrap about__grid">
+      <div class="about__copy reveal">
+        <p class="eyebrow">Quem somos</p>
+        <h2>Prazer, <em>Noites de Dubai</em>.</h2>
+        <p>Somos uma loja brasileira de perfumes árabes. Escolhemos trabalhar com eles porque entregam o que todo mundo procura num perfume: fixação, projeção e presença, por um preço que faz sentido.</p>
+        <p>Aqui você sabe com quem está comprando: somos uma empresa com CNPJ<span data-se-cnpj> (<span data-cnpj-num>66.593.368/0001-19</span>)</span>, toda compra sai com nota fiscal e o pagamento é processado pela Appmax, no Pix ou no cartão.</p>
+        <p>E do outro lado tem gente de verdade. Qualquer dúvida, antes ou depois da compra, é só <a href="#" data-whats>chamar a gente no WhatsApp</a>.</p>
+      </div>
+      <div class="pillars">
+        <div class="card pillar reveal">
+          <div class="benefit__icon"><svg class="i"><use href="#i-receipt"/></svg></div>
+          <div><h3>Empresa registrada</h3><p>CNPJ e nota fiscal em todas as compras.</p></div>
+        </div>
+        <div class="card pillar reveal d1">
+          <div class="benefit__icon"><svg class="i"><use href="#i-truck"/></svg></div>
+          <div><h3>Envio rastreado</h3><p>Frete grátis e postagem em <span data-prazo>até 2 dias úteis</span>, com código de rastreio.</p></div>
+        </div>
+        <div class="card pillar reveal d2">
+          <div class="benefit__icon"><svg class="i"><use href="#i-chat"/></svg></div>
+          <div><h3>Atendimento humano</h3><p>WhatsApp com gente de verdade, antes e depois da compra.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- OFERTA -->
   <section class="offer" id="oferta">
     <div class="wrap offer__grid">
@@ -817,7 +857,7 @@ h1 em{display:block}
    Tudo o que aparece como preço, prazo, contato e depoimento vem daqui.
    ===================================================================== */
 const LOJA = {
-  nome: "",               // nome da loja no rodapé (vazio = não aparece)
+  nome: "Noites de Dubai", // nome da loja no rodapé (vazio = não aparece)
   cnpj: "66.593.368/0001-19",
 
   // WhatsApp de contato: DDI + DDD + número, só dígitos. Vazio = os links somem.
@@ -877,6 +917,8 @@ const LOJA = {
   fill("[data-prazo]", el => el.textContent = LOJA.prazoPostagem);
   fill("[data-loja]", el => el.textContent = LOJA.nome ? ` · ${LOJA.nome}` : "");
   fill("[data-cnpj]", el => el.textContent = LOJA.cnpj ? ` · CNPJ ${LOJA.cnpj}` : "");
+  fill("[data-cnpj-num]", el => el.textContent = LOJA.cnpj);
+  if (!LOJA.cnpj) fill("[data-se-cnpj]", el => el.hidden = true);
 
   // WhatsApp de contato
   const whats = LOJA.whatsapp.replace(/\D/g, "");

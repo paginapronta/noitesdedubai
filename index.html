@@ -269,16 +269,23 @@ h1 em{display:block}
 .review figcaption b{color:var(--text);font-weight:600}
 
 /* Prints de clientes (carrossel automático) */
-.prints{position:relative;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.prints__track{display:flex;gap:clamp(14px,2vw,22px);width:max-content;animation:prints var(--dur,60s) linear infinite}
-.prints:hover .prints__track,.prints:focus-within .prints__track{animation-play-state:paused}
-@keyframes prints{to{transform:translateX(calc(-50% - clamp(14px,2vw,22px)/2))}}
-.print{flex:none;width:clamp(180px,22vw,240px);margin:0;padding:8px;border-radius:30px;background:linear-gradient(160deg,#2a231b,#120e0a);border:1px solid var(--line-strong);box-shadow:0 30px 60px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06);cursor:zoom-in;transition:transform .35s var(--ease),border-color .3s}
-.print:hover{transform:translateY(-6px);border-color:var(--gold)}
-.print img{display:block;width:100%;aspect-ratio:560/1216;object-fit:cover;border-radius:23px}
+.prints{position:relative}
+.prints__track{display:flex;gap:clamp(14px,2vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding:6px max(var(--gutter),calc(50% - 170px)) 14px;-webkit-overflow-scrolling:touch}
+.prints__track::-webkit-scrollbar{display:none}
+.print{flex:none;height:min(78vh,720px);aspect-ratio:560/1216;margin:0;padding:7px;border-radius:30px;background:linear-gradient(160deg,#2a231b,#120e0a);border:1px solid var(--line-strong);box-shadow:0 30px 60px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06);cursor:zoom-in;scroll-snap-align:center;opacity:.45;transform:scale(.94);transition:transform .5s var(--ease),opacity .5s,border-color .3s}
+.print.is-on{opacity:1;transform:none;border-color:var(--gold)}
+.print img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:24px}
 .print:focus-visible{outline:2px solid var(--gold-3);outline-offset:4px}
+.prints__nav{position:absolute;top:50%;z-index:2;width:48px;height:48px;margin-top:-30px;border-radius:50%;border:1px solid var(--line-strong);background:rgba(11,9,7,.82);color:var(--gold-3);font-size:30px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:border-color .2s}
+.prints__nav:hover{border-color:var(--gold)}
+.prints__nav--prev{left:max(4px,calc(50% - min(39vh,360px)*.46 - 64px))}
+.prints__nav--next{right:max(4px,calc(50% - min(39vh,360px)*.46 - 64px))}
+.prints__track{-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.prints__dots{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.prints__dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:var(--line-strong);cursor:pointer;transition:width .3s,background-color .3s}
+.prints__dots button.is-on{width:24px;background:var(--gold)}
 .prints__note{text-align:center;color:var(--muted-2);font-size:13px;margin:18px 0 0}
-@media(prefers-reduced-motion:reduce){.prints{overflow-x:auto}.prints__track{animation:none}}
+@media(prefers-reduced-motion:reduce){.prints__track{scroll-behavior:auto}}
 .zoom{border:0;padding:0;background:transparent;max-width:min(92vw,440px);max-height:92vh}
 .zoom::backdrop{background:rgba(5,4,3,.88);backdrop-filter:blur(4px)}
 .zoom img{display:block;width:100%;max-height:92vh;object-fit:contain;border-radius:20px}
@@ -480,6 +487,25 @@ h1 em{display:block}
       <div class="marquee__group"><span>Pimenta-preta</span><i>✦</i><span>Abacaxi</span><i>✦</i><span>Tabaco</span><i>✦</i><span>Café</span><i>✦</i><span>Íris</span><i>✦</i><span>Patchouli</span><i>✦</i><span>Baunilha</span><i>✦</i><span>Âmbar</span><i>✦</i><span>Benjoim</span><i>✦</i><span>Madeiras secas</span><i>✦</i></div>
     </div>
   </div>
+
+  <!-- DEPOIMENTOS (preenchidos pela lista LOJA.depoimentos) -->
+  <section class="section" id="depoimentos">
+    <div class="wrap">
+      <header class="section__head reveal">
+        <p class="eyebrow">Quem já comprou</p>
+        <h2>O que dizem <em>os clientes</em></h2>
+      </header>
+      <div class="reviews" id="reviews"></div>
+      <div class="prints reveal" id="prints" aria-label="Prints de conversas com clientes">
+        <button type="button" class="prints__nav prints__nav--prev" aria-label="Anterior">‹</button>
+        <div class="prints__track" id="printsTrack"></div>
+        <button type="button" class="prints__nav prints__nav--next" aria-label="Próximo">›</button>
+      </div>
+      <div class="prints__dots" id="printsDots"></div>
+      <p class="prints__note" id="printsNote">Conversas reais com clientes no WhatsApp · toque para ampliar</p>
+      <dialog class="zoom" id="zoom"><img alt=""><button type="button" aria-label="Fechar">×</button></dialog>
+    </div>
+  </section>
 
   <!-- BENEFÍCIOS -->
   <section class="section" id="fragrancia">
@@ -693,20 +719,6 @@ h1 em{display:block}
           <p>Esfregar os pulsos quebra as notas de saída. Deixe secar sozinho.</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- DEPOIMENTOS (preenchidos pela lista LOJA.depoimentos) -->
-  <section class="section" id="depoimentos" style="padding-top:0">
-    <div class="wrap">
-      <header class="section__head reveal">
-        <p class="eyebrow">Quem já comprou</p>
-        <h2>O que dizem <em>os clientes</em></h2>
-      </header>
-      <div class="reviews" id="reviews"></div>
-      <div class="prints reveal" id="prints" aria-label="Prints de conversas com clientes"><div class="prints__track" id="printsTrack"></div></div>
-      <p class="prints__note" id="printsNote">Conversas reais com clientes no WhatsApp · toque para ampliar</p>
-      <dialog class="zoom" id="zoom"><img alt=""><button type="button" aria-label="Fechar">×</button></dialog>
     </div>
   </section>
 
@@ -1033,21 +1045,41 @@ const LOJA = {
       <figcaption><b>${esc(d.nome)}</b>${d.cidade ? ` · ${esc(d.cidade)}` : ""}</figcaption>
     </figure>`).join("");
 
-  // Prints de clientes: a lista vai duplicada para o loop não ter emenda
-  if (!LOJA.prints?.length) { $("#prints").hidden = $("#printsNote").hidden = true; }
+  // Prints de clientes: um por vez no centro, avança sozinho a cada 4 s
+  if (!LOJA.prints?.length) { $("#prints").hidden = $("#printsDots").hidden = $("#printsNote").hidden = true; }
   else {
     if (!LOJA.depoimentos.length) $("#depoimentos").hidden = false;
-    const card = (p, clone) => `<button type="button" class="print"${clone ? ' aria-hidden="true" tabindex="-1"' : ""} data-img="${esc(p.img)}">
-      <img src="${esc(p.img)}" alt="${clone ? "" : "Conversa no WhatsApp com " + esc(p.nome)}" decoding="async" width="560" height="1216"></button>`;
-    const track = $("#printsTrack");
-    track.innerHTML = LOJA.prints.map(p => card(p)).join("") + LOJA.prints.map(p => card(p, true)).join("");
-    track.style.setProperty("--dur", LOJA.prints.length * 7 + "s");
-    const zoom = $("#zoom");
+    const track = $("#printsTrack"), dots = $("#printsDots"), zoom = $("#zoom");
+    track.innerHTML = LOJA.prints.map(p => `<button type="button" class="print" data-img="${esc(p.img)}">
+      <img src="${esc(p.img)}" alt="Conversa no WhatsApp com ${esc(p.nome)}" decoding="async" width="560" height="1216"></button>`).join("");
+    dots.innerHTML = LOJA.prints.map((p, i) => `<button type="button" aria-label="Print ${i + 1}"></button>`).join("");
+    const cards = $$(".print", track), pts = $$("button", dots);
+    let atual = 0, timer, pausado = false;
+    const ir = i => { atual = (i + cards.length) % cards.length; const c = cards[atual];
+      track.scrollTo({ left: c.offsetLeft - (track.clientWidth - c.offsetWidth) / 2 }); };
+    const marcar = () => {
+      const meio = track.scrollLeft + track.clientWidth / 2;
+      let perto = 0; cards.forEach((c, i) => { if (Math.abs(c.offsetLeft + c.offsetWidth / 2 - meio) < Math.abs(cards[perto].offsetLeft + cards[perto].offsetWidth / 2 - meio)) perto = i; });
+      atual = perto; cards.forEach((c, i) => c.classList.toggle("is-on", i === perto)); pts.forEach((d, i) => d.classList.toggle("is-on", i === perto));
+    };
+    const tocar = () => { clearInterval(timer); timer = setInterval(() => { if (!pausado && !document.hidden) ir(atual + 1); }, 4000); };
+    track.addEventListener("scroll", () => requestAnimationFrame(marcar), { passive: true });
+    $(".prints__nav--prev").addEventListener("click", () => { ir(atual - 1); tocar(); });
+    $(".prints__nav--next").addEventListener("click", () => { ir(atual + 1); tocar(); });
+    pts.forEach((d, i) => d.addEventListener("click", () => { ir(i); tocar(); }));
+    const prints = $("#prints");
+    prints.addEventListener("mouseenter", () => pausado = true);
+    prints.addEventListener("mouseleave", () => pausado = false);
+    track.addEventListener("touchstart", () => { pausado = true; }, { passive: true });
+    track.addEventListener("touchend", () => { pausado = false; tocar(); }, { passive: true });
     track.addEventListener("click", e => {
       const b = e.target.closest(".print"); if (!b) return;
+      if (!b.classList.contains("is-on")) { ir(cards.indexOf(b)); tocar(); return; }
       $("img", zoom).src = b.dataset.img; zoom.showModal();
     });
     zoom.addEventListener("click", () => zoom.close());
+    addEventListener("load", () => { ir(0); marcar(); });
+    marcar(); tocar();
   }
 
   // Animação de entrada

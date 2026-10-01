@@ -669,8 +669,8 @@ h1 em{display:block}
   <section class="section" id="depoimentos" style="padding-top:0">
     <div class="wrap">
       <header class="section__head reveal">
-        <p class="eyebrow">Quem usa</p>
-        <h2>O que dizem <em>depois do primeiro elogio</em></h2>
+        <p class="eyebrow">Quem já comprou</p>
+        <h2>O que dizem <em>os clientes</em></h2>
       </header>
       <div class="reviews" id="reviews"></div>
     </div>
@@ -844,7 +844,11 @@ const LOJA = {
 
   // Só depoimentos REAIS de clientes. Lista vazia = a seção some da página. Formato:
   // { nota: 5, texto: "O que o cliente disse", nome: "Nome", cidade: "Cidade/UF" },
-  depoimentos: [],
+  depoimentos: [
+    { nota: 5, texto: "O cheiro fixa muito bem na pele.", nome: "João Pedro" },
+    { nota: 5, texto: "Chegou bem rápido e muito bem embalado.", nome: "Gustavo Silva" },
+    { nota: 5, texto: "Fixa muito bem na pele, chegou rápido e veio muito bem embalado.", nome: "Paulo Sérgio" },
+  ],
 };
 
 (() => {
@@ -922,7 +926,7 @@ const LOJA = {
       ${d.exemplo ? '<span class="review__flag">Exemplo · trocar por real</span>' : ""}
       <div class="stars" role="img" aria-label="${d.nota} de 5 estrelas">${estrela.repeat(d.nota)}</div>
       <blockquote>“${esc(d.texto)}”</blockquote>
-      <figcaption><b>${esc(d.nome)}</b> · ${esc(d.cidade)}</figcaption>
+      <figcaption><b>${esc(d.nome)}</b>${d.cidade ? ` · ${esc(d.cidade)}` : ""}</figcaption>
     </figure>`).join("");
 
   // Animação de entrada

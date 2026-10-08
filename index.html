@@ -400,6 +400,8 @@ h1 em{display:block}
   .js .meter__bar i{transform:none;transition:none}
 }
 </style>
+<!-- Utmify: captura as UTMs do anúncio e repassa para o checkout -->
+<script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
 <!-- Meta Pixel + API de Conversões (via hooks.noitesdedubai.com/capi) -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
@@ -1036,6 +1038,15 @@ const LOJA = {
     toastTimer = setTimeout(() => toast.classList.remove("is-on"), 7000);
   };
 
+  // Leva as UTMs do anúncio (utm_*, src, sck, fbclid) junto para o checkout da Appmax,
+  // porque o link do botão é trocado aqui e perderia o que a Utmify colocou.
+  const comUtms = link => {
+    if (!link) return link;
+    const u = new URL(link), q = new URLSearchParams(location.search);
+    q.forEach((v, k) => { if (/^(utm_|src$|sck$|fbclid$)/.test(k) && !u.searchParams.has(k)) u.searchParams.set(k, v); });
+    return u.toString();
+  };
+
   // Oferta: quantidade, total e finalização
   let qtd = 1;
   const opcoes = $$("input[name=qtd]");
@@ -1044,7 +1055,7 @@ const LOJA = {
     opcoes.forEach(r => r.closest(".option").classList.toggle("is-checked", r.checked));
     $("#valorPix").textContent = brl(pix(precos[qtd]));
     $("#valorCartao").textContent = brl(precos[qtd]);
-    for (const forma in botoes) botoes[forma].href = LOJA.linksPagamento[forma][qtd] || "#";
+    for (const forma in botoes) botoes[forma].href = comUtms(LOJA.linksPagamento[forma][qtd]) || "#";
   };
   opcoes.forEach(r => r.addEventListener("change", () => { qtd = Number(r.value); atualizarOferta(); }));
   atualizarOferta();

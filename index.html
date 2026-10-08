@@ -400,6 +400,26 @@ h1 em{display:block}
   .js .meter__bar i{transform:none;transition:none}
 }
 </style>
+<!-- Meta Pixel + API de Conversões (via hooks.noitesdedubai.com/capi) -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1644737323990170');
+window.rastrear = function (evento, dados) {
+  var id = evento + '.' + Date.now() + '.' + Math.random().toString(36).slice(2, 10);
+  fbq('track', evento, dados || {}, { eventID: id });
+  try {
+    var ck = function (n) { var m = document.cookie.match('(?:^|; )' + n + '=([^;]*)'); return m ? decodeURIComponent(m[1]) : undefined; };
+    var fbc = ck('_fbc'), q = new URLSearchParams(location.search).get('fbclid');
+    if (!fbc && q) fbc = 'fb.1.' + Date.now() + '.' + q;
+    navigator.sendBeacon('https://hooks.noitesdedubai.com/capi', JSON.stringify({
+      event_name: evento, event_id: id, event_source_url: location.href,
+      custom_data: dados || {}, fbp: ck('_fbp'), fbc: fbc
+    }));
+  } catch (e) {}
+};
+rastrear('PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1644737323990170&ev=PageView&noscript=1"/></noscript>
 </head>
 <body>
 
@@ -1029,10 +1049,27 @@ const LOJA = {
   opcoes.forEach(r => r.addEventListener("change", () => { qtd = Number(r.value); atualizarOferta(); }));
   atualizarOferta();
   for (const forma in botoes) botoes[forma].addEventListener("click", e => {
-    if (LOJA.linksPagamento[forma][qtd]) return;
+    if (LOJA.linksPagamento[forma][qtd]) {
+      const valor = forma === "pix" ? pix(precos[qtd]) : precos[qtd];
+      window.rastrear?.("InitiateCheckout", { value: valor, currency: "BRL", num_items: qtd,
+        content_ids: ["asad-lattafa-100ml"], content_type: "product", content_name: "Asad Lattafa 100 ml" });
+      return;
+    }
     e.preventDefault();
     avisar(`Prévia: falta o link de ${forma} para ${qtd} ${qtd > 1 ? "frascos" : "frasco"} em LOJA.linksPagamento (index.html).`);
   });
+
+  // Pixel: "ViewContent" quando a oferta aparece na tela (uma vez por visita)
+  const oferta = $("#oferta");
+  if (oferta && window.rastrear) {
+    const obs = new IntersectionObserver(es => {
+      if (!es.some(x => x.isIntersecting)) return;
+      obs.disconnect();
+      window.rastrear("ViewContent", { value: pix(LOJA.preco), currency: "BRL",
+        content_ids: ["asad-lattafa-100ml"], content_type: "product", content_name: "Asad Lattafa 100 ml" });
+    }, { threshold: 0.3 });
+    obs.observe(oferta);
+  }
 
   // Depoimentos
   const estrela = '<svg><use href="#i-star"/></svg>';

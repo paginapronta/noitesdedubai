@@ -302,6 +302,22 @@ h1 em{display:block}
 .pillar h3{font-size:23px;margin:2px 0 4px}
 .pillar p{margin:0;color:var(--muted);font-size:14.5px}
 
+/* Urgência e escassez (só aparecem com dados reais em LOJA) */
+.urg{display:grid;gap:10px;margin:0 0 22px;padding:14px 16px;border:1px solid var(--line-strong);border-radius:14px;background:rgba(216,180,106,.06);font-size:13.5px;color:var(--muted)}
+.urg[hidden],.urg>[hidden]{display:none}
+.urg__row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.urg__row b{color:var(--gold-3)}
+.urg__dot{flex:none;width:8px;height:8px;border-radius:50%;background:#e2574c;box-shadow:0 0 0 0 rgba(226,87,76,.6);animation:urgpulse 1.8s infinite}
+@keyframes urgpulse{70%{box-shadow:0 0 0 8px rgba(226,87,76,0)}100%{box-shadow:0 0 0 0 rgba(226,87,76,0)}}
+.urg__bar{height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.urg__bar i{display:block;height:100%;width:var(--v,50%);border-radius:inherit;background:linear-gradient(90deg,#e2574c,var(--gold))}
+.urg__clock{display:inline-flex;gap:4px;font-variant-numeric:tabular-nums}
+.urg__clock span{min-width:34px;text-align:center;padding:5px 6px;border-radius:7px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--gold-3);font-weight:700;font-size:14px;line-height:1}
+.urg__clock small{display:block;font-size:9px;font-weight:600;color:var(--muted-2);letter-spacing:.06em;margin-top:2px}
+.sticky__urg{color:#ff8a7f!important;font-weight:600}
+.final__urg{color:var(--gold-3);font-size:14px;margin:-6px 0 22px}
+@media(prefers-reduced-motion:reduce){.urg__dot{animation:none}}
+
 /* Oferta */
 .offer{padding:clamp(76px,10vw,128px) 0;background:radial-gradient(760px 520px at 28% 45%,rgba(184,137,58,.13),transparent 62%)}
 .offer__grid{display:grid;gap:32px;align-items:center}
@@ -434,8 +450,8 @@ h1 em{display:block}
 </svg>
 
 <div class="topbar">
-  <span class="short"><b>Frete grátis</b> · <b data-off>5% OFF</b> no Pix</span>
-  <span class="long"><b>Frete grátis</b> para todo o Brasil, com rastreio &nbsp;·&nbsp; <b data-off>5% OFF</b> no Pix</span>
+  <span class="short"><b>Frete grátis</b> · <b data-off>5% OFF</b> no Pix<span data-urg-top></span></span>
+  <span class="long"><b>Frete grátis</b> para todo o Brasil, com rastreio &nbsp;·&nbsp; <b data-off>5% OFF</b> no Pix<span data-urg-top></span></span>
 </div>
 
 <header class="header" id="header">
@@ -482,6 +498,12 @@ h1 em{display:block}
         <div class="price">
           <div class="price__main"><span data-pix="1">R$ 132,90</span> <small>no Pix</small> <span class="tag-off" data-off>5% OFF</span> <span class="tag-off">Frete grátis</span></div>
           <div class="price__sub">ou <span data-preco="1">R$ 139,90</span> <span data-parcelas="1">em até 12x no cartão</span></div>
+        </div>
+<div class="urg" data-urg hidden>
+          <div class="urg__row" data-urg-estoque hidden><span class="urg__dot"></span><span>Restam só <b data-estoque-n></b> neste lote</span></div>
+          <div class="urg__bar" data-urg-estoque hidden><i></i></div>
+          <div class="urg__row" data-urg-oferta hidden><span><span data-oferta-txt></span> termina em</span><span class="urg__clock" data-clock></span></div>
+          <div class="urg__row" data-urg-envio hidden><svg class="i"><use href="#i-truck"/></svg><span data-envio-txt></span></div>
         </div>
         <div class="hero__ctas">
           <a class="btn btn--gold" href="#oferta" id="heroCta">Quero o meu Asad <svg class="i"><use href="#i-arrow"/></svg></a>
@@ -775,6 +797,13 @@ h1 em{display:block}
         <h2>Asad · Lattafa</h2>
         <p class="offer__sub">Eau de Parfum · 100 ml</p>
 
+<div class="urg" data-urg hidden>
+          <div class="urg__row" data-urg-estoque hidden><span class="urg__dot"></span><span>Restam só <b data-estoque-n></b> neste lote</span></div>
+          <div class="urg__bar" data-urg-estoque hidden><i></i></div>
+          <div class="urg__row" data-urg-oferta hidden><span><span data-oferta-txt></span> termina em</span><span class="urg__clock" data-clock></span></div>
+          <div class="urg__row" data-urg-envio hidden><svg class="i"><use href="#i-truck"/></svg><span data-envio-txt></span></div>
+        </div>
+
         <fieldset class="options">
           <legend class="sr-only">Escolha a quantidade</legend>
           <label class="option is-checked">
@@ -903,6 +932,7 @@ h1 em{display:block}
       <p class="eyebrow">Asad · Lattafa · 100 ml</p>
       <h2>Seu próximo elogio <em>começa aqui.</em></h2>
       <p class="final__price"><b data-pix="1">R$ 132,90</b> no Pix · ou <span data-preco="1">R$ 139,90</span> no cartão · frete grátis</p>
+      <p class="final__urg" data-urg-curto hidden></p>
       <a class="btn btn--gold" href="#oferta">Quero o meu Asad <svg class="i"><use href="#i-arrow"/></svg></a>
     </div>
   </section>
@@ -925,7 +955,7 @@ h1 em{display:block}
 
 <div class="sticky" id="sticky" aria-hidden="true">
   <img src="assets/produto-thumb.jpg" width="200" height="200" alt="">
-  <div class="sticky__txt"><b>Asad · Frete grátis</b><span><span data-pix="1">R$ 132,90</span> no Pix</span></div>
+  <div class="sticky__txt"><b>Asad · Frete grátis</b><span><span data-pix="1">R$ 132,90</span> no Pix<span class="sticky__urg" data-urg-curto></span></span></div>
   <a class="btn btn--gold" href="#oferta" tabindex="-1">Comprar</a>
 </div>
 <a class="wa-float" href="#" data-whats data-se-whats aria-label="Falar com a gente no WhatsApp" title="Fale com a gente no WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.04 3C8.86 3 3.02 8.83 3.02 16c0 2.29.6 4.53 1.74 6.5L3 29l6.67-1.74A12.97 12.97 0 0 0 16.04 29C23.2 29 29.04 23.17 29.04 16S23.2 3 16.04 3zm0 23.68c-2 0-3.95-.54-5.66-1.55l-.4-.24-3.96 1.03 1.06-3.85-.26-.4A10.63 10.63 0 0 1 5.39 16c0-5.88 4.78-10.66 10.65-10.66S26.7 10.12 26.7 16s-4.78 10.68-10.66 10.68zm5.84-7.98c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.15 3.09 1.31 3.3c.16.21 2.26 3.45 5.48 4.84.77.33 1.37.53 1.83.68.77.24 1.47.21 2.02.13.62-.09 1.89-.77 2.16-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg></a>
@@ -957,6 +987,21 @@ const LOJA = {
   parcelas: 12,
   semJuros: false,        // true só se você absorver os juros
   prazoPostagem: "até 2 dias úteis",
+
+  // ---------- URGÊNCIA E ESCASSEZ ----------
+  // Tudo aqui precisa ser VERDADE. Contador falso, estoque inventado ou "oferta que
+  // nunca acaba" é propaganda enganosa (CDC art. 37) e derruba conta de anúncio na Meta.
+  // null = o aviso some da página.
+
+  // Estoque real em mãos. Atualize a cada venda (ou a cada dia). Some quando chegar a 0.
+  estoque: { restantes: 6 },   // ex.: { restantes: 7, lote: 20 } — "lote" liga a barrinha
+
+  // Fim REAL da promoção. Quando o contador zerar, o aviso some — e você precisa
+  // de fato tirar o desconto (aqui e nos links da Appmax).
+  oferta: { nome: "Envio no mesmo dia", ate: "2026-10-10T09:00:00-03:00" }, // ex.: { nome: "Desconto de 5% no Pix", ate: "2026-10-15T23:59:00-03:00" }
+
+  // Horário de corte do envio, se você realmente posta no mesmo dia (dias úteis).
+  corteEnvio: null,       // ex.: { hora: 14, postagem: "hoje" }  (ou postagem: "amanhã")
 
   // Base da comparação "importado de grife" (preço e tamanho do frasco).
   referenciaGrife: { preco: 900, ml: 60 },
@@ -1040,6 +1085,62 @@ const LOJA = {
     q.forEach((v, k) => { if (/^(utm_|src$|sck$|fbclid$)/.test(k) && !u.searchParams.has(k)) u.searchParams.set(k, v); });
     return u.toString();
   };
+
+  // Urgência e escassez — só com dados reais de LOJA (estoque, oferta, corteEnvio)
+  (() => {
+    const pad = n => String(n).padStart(2, "0");
+    const blocos = $$("[data-urg]");
+    const curtos = $$("[data-urg-curto]");
+    const tops = $$("[data-urg-top]");
+    const curto = [];
+    const est = LOJA.estoque;
+    if (est && est.restantes > 0) {
+      const un = est.restantes === 1 ? "1 frasco" : `${est.restantes} frascos`;
+      fill("[data-estoque-n]", el => el.textContent = un);
+      fill(".urg__row[data-urg-estoque]", el => el.hidden = false);
+      if (est.lote) {
+        const v = Math.max(6, Math.min(100, est.restantes / est.lote * 100));
+        fill(".urg__bar", el => { el.style.setProperty("--v", v + "%"); el.hidden = false; });
+      }
+      curto.push(`Restam ${un}`);
+    }
+    const fimOferta = LOJA.oferta && new Date(LOJA.oferta.ate).getTime();
+    if (fimOferta) fill("[data-oferta-txt]", el => el.textContent = LOJA.oferta.nome);
+    const diaUtil = d => d.getDay() > 0 && d.getDay() < 6;
+
+    const tick = () => {
+      const agora = Date.now();
+      const extras = [...curto];
+      // Contador da oferta
+      const resta = fimOferta ? fimOferta - agora : 0;
+      fill("[data-urg-oferta]", el => el.hidden = !(resta > 0));
+      if (resta > 0) {
+        const s = Math.floor(resta / 1000), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
+        const partes = (d ? [[d, "dias"]] : []).concat([[h, "h"], [m, "min"], [ss, "seg"]]);
+        const html = partes.map(([n, r]) => `<span>${pad(n)}<small>${r}</small></span>`).join("");
+        fill("[data-clock]", el => { if (el.innerHTML !== html) el.innerHTML = html; });
+        extras.push(`Oferta acaba em ${d ? d + "d " : ""}${pad(h)}:${pad(m)}:${pad(ss)}`);
+      }
+      // Corte do envio
+      let envio = "";
+      const c = LOJA.corteEnvio, n = new Date();
+      if (c && diaUtil(n) && n.getHours() < c.hora) {
+        const fim = new Date(n); fim.setHours(c.hora, 0, 0, 0);
+        const mins = Math.ceil((fim - n) / 60000);
+        const t = mins >= 60 ? `${Math.floor(mins / 60)}h ${pad(mins % 60)}min` : `${mins} min`;
+        envio = `Peça nas próximas <b>${t}</b> e seu pedido é postado <b>${esc(c.postagem || "hoje")}</b>`;
+      }
+      fill("[data-envio-txt]", el => { if (el.innerHTML !== envio) el.innerHTML = envio; });
+      fill("[data-urg-envio]", el => el.hidden = !envio);
+
+      blocos.forEach(b => b.hidden = ![...b.children].some(c => !c.hidden));
+      const txt = extras[0] || "";
+      curtos.forEach(el => { el.textContent = txt ? (el.closest(".sticky") ? ` · ${txt}` : txt) : ""; el.hidden = !txt; });
+      tops.forEach(el => el.innerHTML = txt ? ` &nbsp;·&nbsp; <b>${esc(txt)}</b>` : "");
+    };
+    tick();
+    if (fimOferta || LOJA.corteEnvio) setInterval(tick, 1000);
+  })();
 
   // Oferta: quantidade, total e finalização
   let qtd = 1;

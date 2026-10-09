@@ -303,19 +303,30 @@ h1 em{display:block}
 .pillar p{margin:0;color:var(--muted);font-size:14.5px}
 
 /* Urgência e escassez (só aparecem com dados reais em LOJA) */
-.urg{display:grid;gap:10px;margin:0 0 22px;padding:14px 16px;border:1px solid var(--line-strong);border-radius:14px;background:rgba(216,180,106,.06);font-size:13.5px;color:var(--muted)}
+.urg{position:relative;display:grid;gap:14px;margin:0 0 24px;padding:18px 18px 16px;border:1.5px solid rgba(226,87,76,.75);border-radius:16px;background:linear-gradient(180deg,rgba(226,87,76,.16),rgba(226,87,76,.05));font-size:14px;color:var(--text,#f3ece0);animation:urgglow 2.4s ease-in-out infinite}
+@keyframes urgglow{0%,100%{box-shadow:0 0 0 0 rgba(226,87,76,0),0 18px 40px -24px rgba(226,87,76,.55)}50%{box-shadow:0 0 0 4px rgba(226,87,76,.14),0 18px 50px -18px rgba(226,87,76,.8)}}
 .urg[hidden],.urg>[hidden]{display:none}
 .urg__row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.urg__big{font-size:17px;font-weight:700;letter-spacing:.01em}
+.urg__big b{display:inline-block;color:#fff;background:#e2574c;border-radius:7px;padding:3px 9px;margin-left:2px;animation:urgblink 1.2s steps(2,start) infinite}
+@keyframes urgblink{50%{background:#b9362c}}
 .urg__row b{color:var(--gold-3)}
-.urg__dot{flex:none;width:8px;height:8px;border-radius:50%;background:#e2574c;box-shadow:0 0 0 0 rgba(226,87,76,.6);animation:urgpulse 1.8s infinite}
-@keyframes urgpulse{70%{box-shadow:0 0 0 8px rgba(226,87,76,0)}100%{box-shadow:0 0 0 0 rgba(226,87,76,0)}}
-.urg__bar{height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
-.urg__bar i{display:block;height:100%;width:var(--v,50%);border-radius:inherit;background:linear-gradient(90deg,#e2574c,var(--gold))}
-.urg__clock{display:inline-flex;gap:4px;font-variant-numeric:tabular-nums}
-.urg__clock span{min-width:34px;text-align:center;padding:5px 6px;border-radius:7px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--gold-3);font-weight:700;font-size:14px;line-height:1}
-.urg__clock small{display:block;font-size:9px;font-weight:600;color:var(--muted-2);letter-spacing:.06em;margin-top:2px}
-.sticky__urg{color:#ff8a7f!important;font-weight:600}
-.final__urg{color:var(--gold-3);font-size:14px;margin:-6px 0 22px}
+.urg__dot{flex:none;width:11px;height:11px;border-radius:50%;background:#ff5a4c;box-shadow:0 0 0 0 rgba(255,90,76,.7);animation:urgpulse 1.4s infinite}
+@keyframes urgpulse{70%{box-shadow:0 0 0 10px rgba(255,90,76,0)}100%{box-shadow:0 0 0 0 rgba(255,90,76,0)}}
+.urg__bar{height:8px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden}
+.urg__bar i{display:block;height:100%;width:var(--v,50%);border-radius:inherit;background:linear-gradient(90deg,#ff5a4c,var(--gold))}
+.urg__lbl{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#ff8a7f;width:100%}
+.urg__lbl::before{content:"⏰ "}
+.urg__clock{display:inline-flex;gap:6px;font-variant-numeric:tabular-nums}
+.urg__clock span{min-width:54px;text-align:center;padding:8px 6px 6px;border-radius:10px;background:#0c0907;border:1px solid rgba(226,87,76,.55);color:#fff;font-weight:800;font-size:26px;line-height:1}
+.urg__clock small{display:block;font-size:9.5px;font-weight:700;color:#ff8a7f;letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+.urg__row .i{color:#ff8a7f}
+.topbar .urg-pill{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;background:#e2574c;color:#fff;font-weight:700;animation:urgblink2 1.6s ease-in-out infinite}
+@keyframes urgblink2{50%{background:#a8302a}}
+.sticky__urg{color:#ff8a7f!important;font-weight:700}
+.final__urg{display:inline-block;color:#fff;background:#e2574c;font-weight:700;font-size:15px;padding:8px 16px;border-radius:999px;margin:-6px 0 22px;animation:urgblink2 1.6s ease-in-out infinite}
+.final__urg[hidden]{display:none}
+@media(prefers-reduced-motion:reduce){.urg,.urg__big b,.topbar .urg-pill,.final__urg{animation:none}}
 @media(prefers-reduced-motion:reduce){.urg__dot{animation:none}}
 
 /* Oferta */
@@ -500,9 +511,9 @@ h1 em{display:block}
           <div class="price__sub">ou <span data-preco="1">R$ 139,90</span> <span data-parcelas="1">em até 12x no cartão</span></div>
         </div>
 <div class="urg" data-urg hidden>
-          <div class="urg__row" data-urg-estoque hidden><span class="urg__dot"></span><span>Restam só <b data-estoque-n></b> neste lote</span></div>
+          <div class="urg__row" data-urg-estoque hidden><span class="urg__dot"></span><span class="urg__big">Últimas unidades! Restam só <b data-estoque-n></b></span></div>
           <div class="urg__bar" data-urg-estoque hidden><i></i></div>
-          <div class="urg__row" data-urg-oferta hidden><span><span data-oferta-txt></span> termina em</span><span class="urg__clock" data-clock></span></div>
+          <div class="urg__row" data-urg-oferta hidden><span class="urg__lbl"><span data-oferta-txt></span> termina em:</span><span class="urg__clock" data-clock></span></div>
           <div class="urg__row" data-urg-envio hidden><svg class="i"><use href="#i-truck"/></svg><span data-envio-txt></span></div>
         </div>
         <div class="hero__ctas">
@@ -798,9 +809,9 @@ h1 em{display:block}
         <p class="offer__sub">Eau de Parfum · 100 ml</p>
 
 <div class="urg" data-urg hidden>
-          <div class="urg__row" data-urg-estoque hidden><span class="urg__dot"></span><span>Restam só <b data-estoque-n></b> neste lote</span></div>
+          <div class="urg__row" data-urg-estoque hidden><span class="urg__dot"></span><span class="urg__big">Últimas unidades! Restam só <b data-estoque-n></b></span></div>
           <div class="urg__bar" data-urg-estoque hidden><i></i></div>
-          <div class="urg__row" data-urg-oferta hidden><span><span data-oferta-txt></span> termina em</span><span class="urg__clock" data-clock></span></div>
+          <div class="urg__row" data-urg-oferta hidden><span class="urg__lbl"><span data-oferta-txt></span> termina em:</span><span class="urg__clock" data-clock></span></div>
           <div class="urg__row" data-urg-envio hidden><svg class="i"><use href="#i-truck"/></svg><span data-envio-txt></span></div>
         </div>
 
@@ -1136,7 +1147,7 @@ const LOJA = {
       blocos.forEach(b => b.hidden = ![...b.children].some(c => !c.hidden));
       const txt = extras[0] || "";
       curtos.forEach(el => { el.textContent = txt ? (el.closest(".sticky") ? ` · ${txt}` : txt) : ""; el.hidden = !txt; });
-      tops.forEach(el => el.innerHTML = txt ? ` &nbsp;·&nbsp; <b>${esc(txt)}</b>` : "");
+      tops.forEach(el => el.innerHTML = txt ? `<span class="urg-pill">${esc(txt)}</span>` : "");
     };
     tick();
     if (fimOferta || LOJA.corteEnvio) setInterval(tick, 1000);
